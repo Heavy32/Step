@@ -53,29 +53,29 @@ using namespace std;
 //    s << MyArray<T>::arr[n];
 //    return s;
 //}
-
+template <typename T>
 class Node
 {
     public:
         int index;
-        int value;
-        Node* forward;
-        Node* back;
+        T value;
+        Node<T>* forward;
+        Node<T>* back;
 
-        Node(int value) : index(value) { }
+        Node(T value) : index(value) { }
 
-        Node(int value, int index) {
+        Node(T value, int index) {
             this->index = index;
             this->value = value;
         }
 
-        Node(int value, int index, Node* back) {
+        Node(T value, int index, Node<T>* back) {
             this->index = index;
             this->value = value;
             this->back = back;
         }
 
-        Node(int value, int index, Node* back, Node* forward) {
+        Node(T value, int index, Node<T>* back, Node<T>* forward) {
             this->index = index;
             this->value = value;
             this->back = back;
@@ -84,23 +84,21 @@ class Node
 
 };
 
+template <typename T>
 class LinkedList
 {
     public:
-        Node* root;
+        Node<T>* root;
+        /*class Iterator;*/
 
-        LinkedList(int rootValue)
+        LinkedList(T rootValue)
         {   
-            root = new Node(rootValue, 0, nullptr, nullptr);
-            //root->value = rootValue;
-            //root->index = 0;
-            //root->back = nullptr;
-            //root->forward = nullptr;
+            root = new Node<T>(rootValue, 0, nullptr, nullptr);
         }
 
         int GetValueByIndex(int index)
         {
-            Node* temp = root;
+            Node<T>* temp = root;
 
             while (temp->index != index)
                 temp = temp->forward;
@@ -108,31 +106,24 @@ class LinkedList
             return temp->value;
         }
 
-        void Add(int value)
+        void Add(T value)
         {
-            Node* temp = root;
+            Node<T>* temp = root;
 
             while (temp->forward != nullptr)
                 temp = temp->forward;
 
-            temp->forward = new Node(value, temp->index + 1, temp);
+            temp->forward = new Node<T>(value, temp->index + 1, temp);
         }
 
-        void AddAtIndex(int value, int index)
+        void AddAtIndex(T value, int index)
         {
-            //Node* temp = root;
-
-            //while (temp->index != index)
-            //    temp = temp->forward;
-
-            //temp->back = new Node(value, index, temp->back->back, temp);
-
-            Node* temp = root;
+            Node<T>* temp = root;
 
             while (temp->index != index)
                 temp = temp->forward;
 
-            Node* nodeToAdd = new Node(value, index, temp->back, temp);            
+            Node<T>* nodeToAdd = new Node<T>(value, index, temp->back, temp);            
 
             temp->back->forward = nodeToAdd;
             temp->back = nodeToAdd;
@@ -141,9 +132,9 @@ class LinkedList
             RestoreIndecies(temp->back);
         }
 
-        void Remove(int value)
+        void Remove(T value)
         {
-            Node* temp = root;
+            Node<T>* temp = root;
 
             while (temp->value != value)
                 temp = temp->forward;
@@ -157,7 +148,7 @@ class LinkedList
             RestoreIndecies(temp);
         }
 
-        void RestoreIndecies(Node* temp)
+        void RestoreIndecies(Node<T>* temp)
         {
             while (temp->forward != nullptr)
             {
@@ -187,9 +178,16 @@ class LinkedList
         //};
 };
 
+//template <typename T>
+//ostream& operator<< (ostream& s, const MyArray<T>& n)
+//{
+//    s << MyArray<T>::arr[n];
+//    return s;
+//}
+
 int main()
 {
-    LinkedList* list = new LinkedList(123);
+    LinkedList<int>* list = new LinkedList<int>(123);
     list->Add(11);
     list->Add(222);
     list->Add(3333);
