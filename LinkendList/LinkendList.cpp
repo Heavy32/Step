@@ -89,7 +89,8 @@ class LinkedList
 {
     public:
         Node<T>* root;
-        /*class Iterator;*/
+        Node<T>* end;
+        class Iterator;
 
         LinkedList(T rootValue)
         {   
@@ -101,7 +102,7 @@ class LinkedList
             Node<T>* temp = root;
 
             while (temp->index != index)
-                temp = temp->forward;
+                temp++;
 
             return temp->value;
         }
@@ -114,6 +115,7 @@ class LinkedList
                 temp = temp->forward;
 
             temp->forward = new Node<T>(value, temp->index + 1, temp);
+            end = root;
         }
 
         void AddAtIndex(T value, int index)
@@ -157,25 +159,28 @@ class LinkedList
             }
         }
 
-        //class Iterator
-        //{
-        //    T* cur;
+        Iterator begin() { return root; }
+        Iterator end() { return root + _n; }
 
-        //public:
-        //    Iterator(T* first) : cur(first)
-        //    {}
-        //    T& operator+ (int n) { return *(cur + n); }
-        //    T& operator- (int n) { return *(cur - n); }
+        class Iterator
+        {
+            T* cur;
 
-        //    T& operator++ (int) { return *cur++; }
-        //    T& operator-- (int) { return *cur--; }
-        //    T& operator++ () { return *++cur; }
-        //    T& operator-- () { return *--cur; }
+        public:
+            Iterator(T* first) : cur(first)
+            {}
+            T& operator+ (int n) { return *(cur + n); }
+            T& operator- (int n) { return *(cur - n); }
 
-        //    bool operator!= (const Iterator& it) { return cur != it.cur; }
-        //    bool operator== (const Iterator& it) { return cur == it.cur; }
-        //    T& operator* () { return *cur; }
-        //};
+            T& operator++ (int) { return *cur++; }
+            T& operator-- (int) { return *cur--; }
+            T& operator++ () { return *++cur; }
+            T& operator-- () { return *--cur; }
+
+            bool operator!= (const Iterator& it) { return cur != it.cur; }
+            bool operator== (const Iterator& it) { return cur == it.cur; }
+            T& operator* () { return *cur; }
+        };
 };
 
 //template <typename T>
@@ -193,7 +198,7 @@ int main()
     list->Add(3333);
     list->Add(44444);
     list->Add(555555);
-    list->AddAtIndex(777, 2);
+    //list->AddAtIndex(777, 2);
     //list->Remove(22);
 
     std::cout << list->GetValueByIndex(3);
